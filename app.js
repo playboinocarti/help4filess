@@ -22,7 +22,7 @@ let files = [];
 const modeConfig = {
   convert: {
     accept: '*',
-    dropText: 'Clicca o trascina file convertibili (DOCX, XLSX, PNG, JPG, MP4, BMP)',
+    dropText: 'Clicca o trascina file convertibili',
     controls: 'convertControls',
     btn: 'convertBtn',
     showHelp: true
