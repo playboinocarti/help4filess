@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Aiuto File</title>
+		<link rel="stylesheet" href="style.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+		<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+		<script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Aiuto File</h1>
+			<p class="subtitle">Converti • Comprimi • Unisci PDF</p>
+
+			<!-- Mini barra -->
+			<div id="toolBar" class="tool-bar">
+				<div class="tool-btn active" data-mode="convert">Converti</div>
+				<div class="tool-btn" data-mode="compress">Comprimi</div>
+				<div class="tool-btn" data-mode="merge">Unisci PDF</div>
+			</div>
+
+			<!-- Drop zone UNICA -->
+			<div id="dropZone" class="drop-zone">
+				<p id="dropText">Trascina i tuoi file qui o clicca</p>
+				<input type="file" id="fileInput" multiple />
+			</div>
+
+			<!-- Lista file -->
+			<div id="fileList" class="file-list"></div>
+
+			<!-- Controlli CONVERTI -->
+			<div id="convertControls" class="controls">
+				<label>
+					Converti in:
+					<select id="formatSelect">
+						<option value="">Seleziona...</option>
+					</select>
+				</label>
+				<button id="convertBtn" disabled>Converti</button>
+			</div>
+
+			<!-- Controlli COMPRIMI -->
+			<div id="compressControls" class="controls hidden">
+				<button id="compressBtn" disabled>Comprimi tutti</button>
+			</div>
+
+			<!-- Controlli UNISCI -->
+			<div id="mergeControls" class="controls hidden">
+				<button id="mergeBtn" disabled>Unisci PDF</button>
+			</div>
+
+			<div id="status" class="status">Pronto</div>
+
+			<!-- Help solo convert -->
+			<div id="helpSection" class="help-section">
+				<h2>Conversioni supportate</h2>
+				<div class="conversion-grid">
+					<div class="conv-box">DOCX → PDF</div>
+					<div class="conv-box">XLSX → PDF</div>
+					<div class="conv-box">MP4 → MP3</div>
+					<div class="conv-box">PNG → JPG</div>
+					<div class="conv-box">JPG → PNG</div>
+					<div class="conv-box">BMP → JPG</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="app.js"></script>
+	</body>
+</html>
