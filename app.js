@@ -36,7 +36,7 @@ const modeConfig = {
   },
   merge: {
     accept: '.pdf',
-    dropText: 'Trascina almeno 2 PDF da unire',
+    dropText: 'Clicca o trascina almeno 2 PDF da unire',
     controls: 'mergeControls',
     btn: 'mergeBtn',
     showHelp: false
