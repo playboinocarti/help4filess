@@ -70,7 +70,12 @@ function switchMode(mode) {
 
   const config = modeConfig[mode];
   fileInput.accept = config.accept;
-  dropText.textContent = config.dropText;
+
+  // per mobile
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  dropText.textContent = isMobile
+    ? 'Tocca per caricare i file'
+    : config.dropText;
 
   // Mostra controlli corretti
   document.querySelectorAll('.controls').forEach(el => el.classList.add('hidden'));
@@ -87,20 +92,33 @@ function switchMode(mode) {
   status.className = '';
 }
 
-// DROP ZONE EVENTS
-['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-  dropZone.addEventListener(eventName, preventDefaults);
-});
-
+// DROP ZONE EVENTS (PC + touch)
 function preventDefaults(e) {
   e.preventDefault();
   e.stopPropagation();
 }
 
-dropZone.addEventListener('dragover', () => dropZone.classList.add('dragover'));
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+// drag & drop (PC)
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+  dropZone.addEventListener(eventName, preventDefaults);
+});
+
+dropZone.addEventListener('dragover', () => {
+  dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', () => {
+  dropZone.classList.remove('dragover');
+});
 dropZone.addEventListener('drop', handleDrop);
-dropZone.addEventListener('click', () => fileInput.click());
+
+// touch (iPad, telefono)
+dropZone.addEventListener('touchstart', preventDefaults, { passive: false });
+dropZone.addEventListener('touchend', (e) => {
+  // apri il file picker su mobile
+  fileInput.click();
+});
+
+// collega l'input ai file
 fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
 
 function handleDrop(e) {
@@ -120,7 +138,11 @@ function handleFiles(inputFiles) {
 
 function updateFileList() {
   if (files.length === 0) {
-    dropText.textContent = modeConfig[currentMode].dropText;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    dropText.textContent = isMobile
+      ? 'Tocca per caricare i file'
+      : modeConfig[currentMode].dropText;
+
     fileList.innerHTML = '';
     convertBtn.disabled = compressBtn.disabled = mergeBtn.disabled = true;
     return;
@@ -225,7 +247,7 @@ async function convertFiles() {
 
     try {
       const converted = await convertSingleFile(file, format);
-      download(converted, file.name.replace(/\.[^.]+$/, `.${format}`));
+      download(converted, file.name.replace(/\\.[^.]+$/, `.${format}`));
       updateProgress(i, 100, "Completato");
     } catch (error) {
       updateProgress(i, 100, "Errore");
