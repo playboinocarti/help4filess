@@ -5,6 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Aiuto File</title>
 		<link rel="stylesheet" href="style.css" />
+
+		<!-- librerie -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 		<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
@@ -26,8 +28,17 @@
 			<!-- Drop zone UNICA -->
 			<div id="dropZone" class="drop-zone">
 				<p id="dropText">Trascina i tuoi file qui o clicca</p>
-				<input type="file" id="fileInput" multiple />
 			</div>
+
+			<!-- Input file nascosto -->
+
+			<input
+				type="file"
+				id="fileInput"
+				multiple
+				style="display: none;"
+			/>
+
 
 			<!-- Lista file -->
 			<div id="fileList" class="file-list"></div>
