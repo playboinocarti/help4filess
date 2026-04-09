@@ -101,7 +101,6 @@ dropZone.addEventListener('dragover', () => dropZone.classList.add('dragover'));
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
 dropZone.addEventListener('drop', handleDrop);
 dropZone.addEventListener('click', () => fileInput.click());
-
 fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
 
 function handleDrop(e) {
