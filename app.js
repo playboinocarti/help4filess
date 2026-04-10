@@ -105,7 +105,7 @@ dropZone.addEventListener('dragover', () => dropZone.classList.add('dragover'));
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
 dropZone.addEventListener('drop', handleDrop);
 
-// CLICK sulla zona drop (anche mobile) + TOUCH
+// CLICK sulla zona drop (anche mobile)
 dropZone.addEventListener('click', () => {
   fileInput.click();
 });
@@ -117,6 +117,7 @@ fileInput.addEventListener('change', (e) => {
 });
 
 function handleDrop(e) {
+  preventDefaults(e);
   dropZone.classList.remove('dragover');
   handleFiles(e.dataTransfer.files);
 }
@@ -197,7 +198,7 @@ function updateConvertSelect() {
     return;
   }
 
-  const ext = getFileExt(files[0].name); // 👈 corretto
+  const ext = getFileExt(files[0].name);
   const available = convertibleFormats[ext];
 
   if (available) {
@@ -311,19 +312,19 @@ async function convertSingleFile(file, format) {
     const samplesPerFrame = 1152;
 
     for (let i = 0; i < int16Data.length; i += samplesPerFrame) {
-      const leftChunk = int16Data.subarray(i, i + samplesPerFrame);
+      const leftChunk = int16Data[i].subarray(0, samplesPerFrame);
       let mp3buf;
       if (channels === 2) {
-        const rightChunk = int16Data.subarray(i, i + samplesPerFrame); [dev](https://dev.to/codeparrot/how-to-enable-javascript-on-iphone-jp1)
+        const rightChunk = int16Data[i + 1]?.subarray(0, samplesPerFrame);
         mp3buf = mp3Encoder.encodeBuffer(leftChunk, rightChunk);
       } else {
         mp3buf = mp3Encoder.encodeBuffer(leftChunk);
       }
-      if (mp3buf.length > 0) mp3Data.push(mp3buf);
+      if (mp3buf && mp3buf.length > 0) mp3Data.push(mp3buf);
     }
 
     const final = mp3Encoder.flush();
-    if (final.length > 0) mp3Data.push(final);
+    if (final && final.length > 0) mp3Data.push(final);
 
     return new Blob(mp3Data, { type: 'audio/mp3' });
   }
@@ -356,6 +357,7 @@ async function convertFiles() {
       successCount++;
       updateProgress(i, 100, '✓ Completato');
     } catch (error) {
+      console.error('Errore in conversione:', error);
       updateProgress(i, 100, '✗ Errore');
     }
   }
@@ -422,6 +424,7 @@ async function compressFiles() {
       successCount++;
       updateProgress(i, 100, '✓ Completato');
     } catch (error) {
+      console.error('Errore in compressione:', error);
       updateProgress(i, 100, '✗ Errore');
     }
   }
@@ -471,6 +474,6 @@ function download(blob, filename) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  // opzionale
+  // opzionale, più sicuro per alcuni browser
   setTimeout(() => URL.revokeObjectURL(url), 100);
 }
