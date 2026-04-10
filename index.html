@@ -1,457 +1,89 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal File Converter - Tutti i Formati Mobile/PC</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <style>
-        /* STILI COMPLETI - RESPONSIVE */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: system-ui, -apple-system, sans-serif; 
-            background: #f5f5f5; color: #333; line-height: 1.5;
-            padding: 1rem; max-width: 28rem; margin: auto;
-        }
-        .container { 
-            background: white; border-radius: 1rem; 
-            box-shadow: 0 0.25rem 1.5rem rgba(0,0,0,0.1); overflow: hidden;
-        }
-        .header { 
-            background: linear-gradient(135deg, #4f46e5, #7c3aed); 
-            color: white; padding: 1.5rem; text-align: center; 
-        }
-        .header h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
-        .header .subtitle { font-size: 0.9rem; opacity: 0.9; }
-        
-        .toolbar { display: flex; background: white; border-bottom: 1px solid #e5e7eb; }
-        .tool-btn { 
-            flex: 1; padding: 1rem; text-align: center; cursor: pointer; 
-            font-weight: 500; border-bottom: 0.2rem solid transparent;
-            transition: all 0.2s ease;
-        }
-        .tool-btn.active { background: #eff6ff; border-bottom-color: #3b82f6; color: #1e40af; }
-        .tool-btn:hover:not(.active) { background: #f8fafc; }
-        
-        .dropzone { 
-            min-height: 10rem; border: 0.2rem dashed #d1d5db; border-radius: 0.75rem; 
-            display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; margin: 1.5rem; cursor: pointer;
-            transition: all 0.3s ease; background: #fafafa;
-        }
-        .dropzone.dragover { border-color: #3b82f6; background: #eff6ff; transform: translateY(-0.1rem); }
-        .dropzone-text { font-size: 1.1rem; color: #6b7280; margin-bottom: 0.5rem; }
-        
-        .filelist { max-height: 12rem; overflow-y: auto; background: #f9fafb; }
-        .fileitem { display: flex; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid #f3f4f6; font-size: 0.875rem; }
-        .progress-wrapper { flex: 1; display: flex; align-items: center; gap: 0.75rem; }
-        .progress-container { flex: 1; height: 0.375rem; background: #e5e7eb; border-radius: 0.2rem; overflow: hidden; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.3s ease; border-radius: 0.2rem; }
-        .progress-text { font-weight: 500; min-width: 3.5rem; }
-        .remove-btn { background: none; border: none; font-size: 1.25rem; cursor: pointer; color: #9ca3af; padding: 0.25rem; }
-        .remove-btn:hover { color: #ef4444; }
-        
-        .controls { padding: 1.5rem; background: #f8fafc; }
-        .controls.hidden { display: none; }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151; }
-        select, button { width: 100%; padding: 0.875rem; border: 2px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; transition: all 0.2s; }
-        select:focus, button:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 0.2rem rgba(59,130,246,0.1); }
-        button:disabled { opacity: 0.6; cursor: not-allowed; background: #d1d5db; }
-        button:not(:disabled):hover { background: #3b82f6; color: white; border-color: #2563eb; }
-        
-        .status { padding: 1rem 1.5rem; text-align: center; font-weight: 500; margin: 0 1.5rem 1.5rem; border-radius: 0.5rem; }
-        .status.success { background: #ecfdf5; color: #166534; border: 1px solid #bbf7d0; }
-        .status.loading { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
-        .status.error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-        
-        .ios-warning { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; padding: 1rem 1.5rem; border-radius: 0.5rem; margin: 1rem 1.5rem; font-size: 0.875rem; border: 1px solid #f59e0b; }
-        .help-section { padding: 1.5rem; background: #f8fafc; }
-        .help-section h2 { margin-bottom: 1rem; color: #1f2937; }
-        .conversion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: 0.75rem; }
-        .conv-box { background: white; padding: 0.75rem; border-radius: 0.5rem; text-align: center; font-size: 0.8rem; box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.08); }
-        
-        @media (max-width: 480px) { body { padding: 0.5rem; } .dropzone { margin: 1rem; min-height: 9rem; } }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aiuto File • Converti • Comprimi • Unisci PDF</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- librerie -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+  <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+  <!-- tuo CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Universal File Converter</h1>
-            <p class="subtitle">DOCX→PDF, XLSX→PDF, MP4→MP3 - Mobile/PC</p>
-        </div>
+  <div class="container">
+    <h1>Aiuto File</h1>
+    <p class="subtitle">Converti • Comprimi • Unisci PDF</p>
 
-        <div id="iosWarning" class="ios-warning" style="display: none;">
-            Modalità avanzata attiva: tutti i formati disponibili
-        </div>
-
-        <div id="toolbar" class="toolbar">
-            <div class="tool-btn active" data-mode="convert">Converti</div>
-            <div class="tool-btn" data-mode="compress">Comprimi</div>
-            <div class="tool-btn" data-mode="merge">Unisci PDF</div>
-        </div>
-
-        <div id="dropzone" class="dropzone">
-            <p id="droptext" class="dropzone-text">Trascina file o clicca per selezionare</p>
-        </div>
-        <input type="file" id="fileinput" multiple style="display: none;">
-
-        <div id="filelist" class="filelist"></div>
-
-        <div id="convertcontrols" class="controls">
-            <div class="form-group">
-                <label for="formatselect">Converti in:</label>
-                <select id="formatselect">
-                    <option value="">Seleziona formato...</option>
-                </select>
-            </div>
-            <button id="convertbtn" disabled>Converti file</button>
-        </div>
-
-        <div id="compresscontrols" class="controls hidden">
-            <button id="compressbtn" disabled>Comprimi tutti</button>
-        </div>
-
-        <div id="mergecontrols" class="controls hidden">
-            <button id="mergebtn" disabled>Unisci PDF</button>
-        </div>
-
-        <div id="status" class="status">Pronto</div>
-
-        <div id="helpsection" class="help-section hidden">
-            <h2>Formati supportati</h2>
-            <div class="conversion-grid">
-                <div class="conv-box">DOCX → PDF</div>
-                <div class="conv-box">XLSX → PDF</div>
-                <div class="conv-box">MP4 → MP3</div>
-                <div class="conv-box">PNG ↔ JPG</div>
-                <div class="conv-box">Compress. immagini</div>
-                <div class="conv-box">Unione PDF</div>
-            </div>
-        </div>
+    <div id="toolBar" class="tool-bar">
+      <div class="tool-btn active" data-mode="convert">Converti</div>
+      <div class="tool-btn" data-mode="compress">Comprimi</div>
+      <div class="tool-btn" data-mode="merge">Unisci PDF</div>
     </div>
 
-    <script>
-        /* CONVERTITORE UNIVERSALE COMPLETO - TUTTI I FORMATO SU OGNI DISPOSITIVO */
-        
-        // Elementi DOM
-        const elements = {
-            toolbar: document.getElementById('toolbar'),
-            dropzone: document.getElementById('dropzone'),
-            fileinput: document.getElementById('fileinput'),
-            filelist: document.getElementById('filelist'),
-            formatselect: document.getElementById('formatselect'),
-            convertbtn: document.getElementById('convertbtn'),
-            compressbtn: document.getElementById('compressbtn'),
-            mergebtn: document.getElementById('mergebtn'),
-            convertcontrols: document.getElementById('convertcontrols'),
-            compresscontrols: document.getElementById('compresscontrols'),
-            mergecontrols: document.getElementById('mergecontrols'),
-            helpsection: document.getElementById('helpsection'),
-            droptext: document.getElementById('droptext'),
-            status: document.getElementById('status'),
-            ioswarning: document.getElementById('iosWarning')
-        };
+    <!-- zona drop PC -->
+    <div id="dropZone" class="drop-zone">
+      <p id="dropText">Trascina file qui o clicca sul bottone</p>
+    </div>
 
-        let currentMode = 'convert', files = [], isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    <!-- bottone VERO per Safari iOS -->
+    <div class="file-picker-wrapper">
+      <label for="fileInput" class="file-btn">
+        Seleziona file
+      </label>
+      <input
+        type="file"
+        id="fileInput"
+        multiple
+        style="display: none;"
+      />
+    </div>
 
-        // Config modalità
-        const modeConfig = {
-            convert: { accept: '*/*', dropText: 'Tutti i file', controls: 'convertcontrols', showHelp: true },
-            compress: { accept: 'image/*,.pdf', dropText: 'Immagini/PDF', controls: 'compresscontrols', showHelp: false },
-            merge: { accept: '.pdf', dropText: '2+ PDF', controls: 'mergecontrols', showHelp: false }
-        };
+    <!-- LISTA FILE -->
+    <div id="fileList" class="file-list"></div>
 
-        const convertibleFormats = {
-            docx: ['pdf'], xlsx: ['pdf'], mp4: ['mp3'], 
-            png: ['jpg','webp'], jpg: ['png','webp'], jpeg: ['png','webp'], 
-            bmp: ['jpg','png'], pdf: ['jpg'], txt: ['pdf']
-        };
+    <!-- convert CONTROLS -->
+    <div id="convertControls" class="controls">
+      <div class="control-group">
+        <label>Converti in:</label>
+        <select id="formatSelect"></select>
+      </div>
+      <button id="convertBtn" disabled>Converti</button>
+    </div>
 
-        // INIZIALIZZAZIONE
-        function init() {
-            elements.ioswarning.style.display = isIOS ? 'block' : 'none';
-            setupEvents();
-            switchMode('convert');
-        }
+    <!-- compress CONTROLS -->
+    <div id="compressControls" class="controls hidden">
+      <button id="compressBtn" disabled>Comprimi tutti</button>
+    </div>
 
-        function setupEvents() {
-            // Toolbar
-            elements.toolbar.onclick = e => e.target.classList.contains('tool-btn') && switchMode(e.target.dataset.mode);
+    <!-- merge CONTROLS -->
+    <div id="mergeControls" class="controls hidden">
+      <button id="mergeBtn" disabled>Unisci PDF</button>
+    </div>
 
-            // Dropzone universale
-            const prevent = e => { e.preventDefault(); e.stopPropagation(); };
-            ['dragenter','dragover'].forEach(ev => elements.dropzone.addEventListener(ev, () => elements.dropzone.classList.add('dragover')));
-            ['dragleave','drop'].forEach(ev => elements.dropzone.addEventListener(ev, () => elements.dropzone.classList.remove('dragover')));
-            elements.dropzone.onclick = () => elements.fileinput.click();
-            elements.dropzone.ontouchend = prevent;
-            elements.fileinput.onchange = e => handleFiles(e.target.files);
-            window.ondrop = e => handleFiles(e.dataTransfer.files);
-        }
+    <!-- STATUS -->
+    <div id="status" class="status">Pronto</div>
 
-        function switchMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
-            const cfg = modeConfig[mode];
-            elements.fileinput.accept = cfg.accept;
-            elements.droptext.textContent = cfg.dropText;
-            document.querySelectorAll('.controls').forEach(c => c.classList.add('hidden'));
-            document.getElementById(cfg.controls).classList.remove('hidden');
-            elements.helpsection.classList.toggle('hidden', !cfg.showHelp);
-            resetFiles();
-        }
+    <!-- HELP (solo convert) -->
+    <div id="helpSection" class="help-section">
+      <h2>Conversioni supportate</h2>
+      <div class="conversion-grid">
+        <div class="conv-box">DOCX → PDF</div>
+        <div class="conv-box">XLSX → PDF</div>
+        <div class="conv-box">MP4 → MP3</div>
+        <div class="conv-box">PNG ↔ JPG</div>
+        <div class="conv-box">Compress. immagini</div>
+        <div class="conv-box">Unione PDF</div>
+      </div>
+    </div>
+  </div>
 
-        function handleFiles(inputFiles) {
-            files = Array.from(inputFiles).slice(0, 8);
-            if (currentMode === 'merge') files = files.filter(f => f.name.toLowerCase().endsWith('.pdf'));
-            updateFileList();
-        }
-
-        function updateFileList() {
-            if (!files.length) {
-                elements.droptext.textContent = modeConfig[currentMode].dropText;
-                elements.filelist.innerHTML = '';
-                elements.convertbtn.disabled = elements.compressbtn.disabled = elements.mergebtn.disabled = true;
-                return;
-            }
-            elements.droptext.textContent = `${files.length} file`;
-            elements.filelist.innerHTML = files.map((f,i) => `
-                <div class="fileitem">
-                    <div class="progress-wrapper" id="p${i}">
-                        <span class="progress-text">${getExt(f.name)}</span>
-                        <div class="progress-container"><div class="progress-bar" style="width:0%"></div></div>
-                        <button class="remove-btn" onclick="rm(${i})">×</button>
-                    </div>
-                </div>`).join('');
-            elements.convertbtn.disabled = false;
-            elements.compressbtn.disabled = false;
-            elements.mergebtn.disabled = currentMode === 'merge' && files.length < 2;
-            if (currentMode === 'convert') updateFormats();
-        }
-
-        function getExt(n) { return n.slice((n.lastIndexOf('.')-1>>>0)+2).toLowerCase(); }
-        window.rm = i => { files.splice(i,1); updateFileList(); };
-
-        function updateFormats() {
-            elements.formatselect.innerHTML = '<option value="">Seleziona...</option>';
-            if (!files[0]) return;
-            const exts = convertibleFormats[getExt(files[0].name)] || [];
-            exts.forEach(e => elements.formatselect.add(new Option(e.toUpperCase(), e)));
-        }
-
-        elements.formatselect.onchange = () => {
-            const f = elements.formatselect.value;
-            elements.status.textContent = f ? `→ ${f.toUpperCase()}` : 'Seleziona formato';
-            elements.status.className = f ? '' : 'error';
-        };
-
-        // PROGRESS
-        function updateProg(i,p,t) {
-            const el = document.getElementById(`p${i}`);
-            if (el) {
-                el.querySelector('.progress-bar').style.width = `${p}%`;
-                el.querySelector('.progress-text').textContent = t;
-            }
-        }
-
-        function resetFiles() { files = []; updateFileList(); elements.status.textContent = 'Pronto'; elements.status.className = ''; }
-
-        function setStatus(t,c='') { elements.status.textContent = t; elements.status.className = c; }
-
-        // DOWNLOAD
-        function download(b,n) {
-            const u = URL.createObjectURL(b), a = document.createElement('a');
-            a.href = u; a.download = n; document.body.appendChild(a); a.click();
-            document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(u),100);
-        }
-
-        /* ========================================
-           CONVERSIONI COMPLETE - MOBILE/PC
-           ======================================== */
-
-        // Librerie CDN caricate dinamicamente
-        async function loadLib(lib) {
-            if (!window[lib]) {
-                const s = document.createElement('script');
-                s.src = lib === 'JSZip' ? 'https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js' :
-                         lib === 'pdfLib' ? 'https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js' :
-                         lib === 'sheetJS' ? 'https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js' : '';
-                document.head.appendChild(s);
-                await new Promise(r=>s.onload=r);
-            }
-        }
-
-        elements.convertbtn.onclick = async convertFiles;
-        async function convertFiles() {
-            const fmt = elements.formatselect.value;
-            if (!fmt) return setStatus('Seleziona formato','error');
-            setStatus('Conversione...','loading');
-            let ok = 0;
-            for (let i=0; i<files.length; i++) {
-                updateProg(i,10,'Inizio...');
-                try {
-                    const blob = await universalConvert(files[i], fmt);
-                    download(blob, files[i].name.replace(/\.[^/.]+$/ ,`.${fmt}`));
-                    updateProg(i,100,'OK');
-                    ok++;
-                } catch(e) {
-                    updateProg(i,100,'ERR');
-                    console.error(e);
-                }
-            }
-            setStatus(`${ok} convertiti`,'success');
-        }
-
-        // CONVERTITORE UNIVERSALE
-        async function universalConvert(file, fmt) {
-            const ext = getExt(file.name);
-            
-            // IMMAGINI - Canvas nativo ovunque
-            if (['png','jpg','jpeg','bmp'].includes(ext)) {
-                return resizeImage(file, fmt === 'jpg' ? 'jpeg' : fmt);
-            }
-            
-            // DOCX → PDF
-            if (ext === 'docx' && fmt === 'pdf') {
-                await loadLib('JSZip');
-                const zip = new JSZip();
-                await zip.loadAsync(file);
-                const xml = await zip.file('word/document.xml')?.async('string') || 'DOCX content';
-                const canvas = document.createElement('canvas');
-                canvas.width = 595; canvas.height = 842;
-                const ctx = canvas.getContext('2d');
-                ctx.fillStyle = 'white'; ctx.fillRect(0,0,595,842);
-                ctx.fillStyle = 'black'; ctx.font = '16px sans-serif';
-                ctx.fillText(xml.slice(0,800), 50, 100);
-                return new Promise(r=>canvas.toBlob(r, 'application/pdf'));
-            }
-            
-            // XLSX → PDF  
-            if (ext === 'xlsx' && fmt === 'pdf') {
-                await loadLib('sheetJS');
-                const data = await file.arrayBuffer();
-                const wb = XLSX.read(data, {type: 'array'});
-                const html = XLSX.write(wb, {bookType: 'html', type: 'string'});
-                const canvas = document.createElement('canvas');
-                canvas.width = 595; canvas.height = 842;
-                const ctx = canvas.getContext('2d');
-                ctx.fillStyle = 'white'; ctx.fillRect(0,0,595,842);
-                // Render HTML semplice
-                ctx.fillStyle = 'black'; ctx.font = '14px monospace';
-                ctx.fillText(html.slice(0,600), 50, 100);
-                return new Promise(r=>canvas.toBlob(r, 'application/pdf'));
-            }
-            
-            // MP4 → MP3 - AudioContext mobile-safe
-            if (ext === 'mp4' && fmt === 'mp3') {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const buffer = await file.arrayBuffer();
-                const audioBuf = await audioCtx.decodeAudioData(buffer);
-                
-                // WAV semplice (iOS compatibile)
-                const wav = audioBufferToWav(audioBuf);
-                return new Blob([wav], {type: 'audio/wav'});
-            }
-            
-            throw new Error(`Conversione ${ext}→${fmt} non disponibile`);
-        }
-
-        // AudioBuffer → WAV (mobile-safe)
-        function audioBufferToWav(buffer) {
-            const numChannels = buffer.numberOfChannels;
-            const sampleRate = buffer.sampleRate;
-            const length = buffer.length * numChannels * 2 + 44;
-            const arrayBuffer = new ArrayBuffer(length);
-            const view = new DataView(arrayBuffer);
-            
-            // WAV header
-            const writeString = (offset, str) => {
-                for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
-            };
-            writeString(0, 'RIFF');
-            view.setUint32(4, 36 + buffer.length * numChannels * 2, true);
-            writeString(8, 'WAVE');
-            writeString(12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true);
-            view.setUint16(22, numChannels, true);
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, sampleRate * numChannels * 2, true);
-            view.setUint16(32, numChannels * 2, true);
-            view.setUint16(34, 16, true);
-            writeString(36, 'data');
-            view.setUint32(40, buffer.length * numChannels * 2, true);
-            
-            // Samples
-            let offset = 44;
-            for (let i = 0; i < buffer.length; i++) {
-                for (let channel = 0; channel < numChannels; channel++) {
-                    const sample = Math.max(-1, Math.min(1, buffer.getChannelData(channel)[i]));
-                    view.setInt16(offset, sample * 0x7FFF, true);
-                    offset += 2;
-                }
-            }
-            return arrayBuffer;
-        }
-
-        // RESIZE IMMAGINI
-        async function resizeImage(file, mimeType, max = isIOS ? 1024 : 1920) {
-            return new Promise((res,rej) => {
-                const img = new Image();
-                img.onload = () => {
-                    let w = img.width, h = img.height;
-                    if (w > h) { if (w > max) { h *= max/w; w = max; } }
-                    else { if (h > max) { w *= max/h; h = max; } }
-                    const c = document.createElement('canvas');
-                    c.width = w; c.height = h;
-                    const ctx = c.getContext('2d', {willReadFrequently: false});
-                    ctx.fillStyle = 'white'; ctx.fillRect(0,0,w,h);
-                    ctx.imageSmoothingQuality = 'high';
-                    ctx.drawImage(img,0,0,w,h);
-                    c.toBlob(res, `image/${mimeType}`, 0.88);
-                };
-                img.onerror = rej;
-                img.src = URL.createObjectURL(file);
-            });
-        }
-
-        // COMPRESSIONE
-        elements.compressbtn.onclick = async compressFiles;
-        async function compressFiles() {
-            setStatus('Compressione...','loading');
-            let ok = 0;
-            for (let i=0; i<files.length; i++) {
-                updateProg(i,20,'Comprimendo...');
-                const ext = getExt(files[i].name);
-                const blob = ['png','jpg','jpeg'].includes(ext) ? 
-                    await resizeImage(files[i], ext === 'png' ? 'png' : 'jpeg') :
-                    files[i]; // Fallback
-                download(blob, `comp_${files[i].name}`);
-                updateProg(i,100,'OK');
-                ok++;
-            }
-            setStatus(`${ok} compressi`,'success');
-        }
-
-        // UNIONE PDF
-        elements.mergebtn.onclick = async mergePDFs;
-        async function mergePDFs() {
-            if (files.length < 2) return setStatus('Min 2 PDF','error');
-            setStatus('Unione...','loading');
-            await loadLib('JSZip');
-            const zip = new JSZip();
-            files.forEach((f,i) => { zip.file(`pdf_${i+1}.pdf`, f); updateProg(i,60,'Aggiunto'); });
-            const zblob = await zip.generateAsync({type:'blob', compression:'DEFLATE'});
-            download(zblob, 'pdf_uniti.zip');
-            files.forEach((_,i) => updateProg(i,100,'OK'));
-            setStatus('Unione completata','success');
-        }
-
-        // START
-        init();
-        console.log('Universal Converter - Tutti i formati attivi');
-    </script>
+  <script src="app.js"></script>
 </body>
 </html>
