@@ -197,7 +197,7 @@ function updateConvertSelect() {
     return;
   }
 
-  const ext = getFileExt(files.name);
+  const ext = getFileExt(files[0].name); // 👈 corretto
   const available = convertibleFormats[ext];
 
   if (available) {
@@ -470,8 +470,7 @@ function download(blob, filename) {
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url); // elimina il riferimento temporaneo
-}
   URL.revokeObjectURL(url);
-  // opzionale, per evitare problemi di riferimento in alcuni browser
+  // opzionale
   setTimeout(() => URL.revokeObjectURL(url), 100);
+}
