@@ -157,7 +157,15 @@ function formatBytes(bytes) {
 }
 
 function getFileExt(filename) {
-  return filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 1).toLowerCase();
+  if (!filename || typeof filename !== 'string') return '';
+  
+  // trova ULTIMO punto (non primo)
+  const dotIndex = filename.lastIndexOf('.');
+  if (dotIndex === -1) return '';
+  
+  // prendi DOPO il punto
+  const ext = filename.slice(dotIndex + 1);
+  return ext.toLowerCase().trim(); // rimuove spazi
 }
 
 // AGGIORNA LISTA FILE
