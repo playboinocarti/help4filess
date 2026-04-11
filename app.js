@@ -124,12 +124,26 @@ function handleDrop(e) {
 }
 
 function handleFiles(inputFiles) {
-  const newFiles = Array.from(inputFiles).slice(0, 10);
+  const newFiles = Array.from(inputFiles).slice(0, 10).map(file => {
+    // forza minuscolo all’estensione senza rinominarlo davvero
+    const ext = getFileExt(file.name);
+    const base = file.name.replace(/\.[^/.]*$/, '');
+    const normalized = base + '.' + ext;
+    Object.defineProperty(file, 'name', {
+      writable: true,
+      configurable: true,
+      value: normalized
+    });
+    return file;
+  });
+
   if (currentMode === 'merge') {
     files = newFiles.filter(f => f.name.toLowerCase().endsWith('.pdf'));
   } else {
     files = newFiles;
   }
+  updateFileList();
+}
   updateFileList();
 }
 
