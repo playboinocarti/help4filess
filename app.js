@@ -105,9 +105,11 @@ dropZone.addEventListener('dragover', () => dropZone.classList.add('dragover'));
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
 dropZone.addEventListener('drop', handleDrop);
 
-// CLICK sulla zona drop (anche mobile)
+// CLICK sulla zona drop (solo PC, non su iPad)
 dropZone.addEventListener('click', () => {
-  fileInput.click();
+  if (!isMobile) {
+    fileInput.click();
+  }
 });
 
 // INPUT FILE
@@ -117,7 +119,6 @@ fileInput.addEventListener('change', (e) => {
 });
 
 function handleDrop(e) {
-  preventDefaults(e);
   dropZone.classList.remove('dragover');
   handleFiles(e.dataTransfer.files);
 }
@@ -474,6 +475,6 @@ function download(blob, filename) {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  // opzionale, più sicuro per alcuni browser
+  // opzionale, più sicuro
   setTimeout(() => URL.revokeObjectURL(url), 100);
 }
